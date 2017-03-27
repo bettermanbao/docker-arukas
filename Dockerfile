@@ -48,6 +48,8 @@ RUN apk upgrade --no-cache \
         shadowsocks-libev-$SS_LIBEV_VERSION \
         /var/cache/apk/*
 
+ADD nginx.conf /nginx.conf
+ADD pdnsd.conf /pdnsd.conf
 ADD entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
