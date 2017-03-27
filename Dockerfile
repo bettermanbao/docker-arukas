@@ -20,4 +20,4 @@ COPY nginx.conf /root/nginx.conf
 
 EXPOSE 22 80 53
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+CMD ["/usr/bin/supervisord"]
