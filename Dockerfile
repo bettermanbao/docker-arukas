@@ -5,9 +5,7 @@ RUN apk update --no-cache
 RUN apk add --no-cache openssh bash
 RUN ssh-keygen -A
 RUN mkdir -p /root/.ssh
-RUN echo 'root:root' |chpasswd
 RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
-RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
 
 RUN apk add --no-cache supervisor
 COPY sshd_nginx_pdnsd.conf /etc/supervisord.conf
