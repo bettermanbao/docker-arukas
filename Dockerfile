@@ -2,10 +2,9 @@ FROM alpine:3.5
 
 RUN apk update --no-cache
 
-RUN apk add --no-cache openssh bash
-RUN ssh-keygen -A
-RUN mkdir -p /root/.ssh
-RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN apk add --no-cache openssh
+RUN sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config
+RUN echo "root:root" | chpasswd
 
 RUN apk add --no-cache supervisor
 COPY sshd_nginx_pdnsd.conf /etc/supervisord.conf
