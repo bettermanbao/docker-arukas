@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM rastasheep/ubuntu-sshd:14.04
 
 ADD pdnsd /usr/bin/pdnsd
 ADD pdnsd.conf /pdnsd.conf
