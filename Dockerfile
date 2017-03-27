@@ -1,12 +1,22 @@
-FROM rastasheep/ubuntu-sshd:14.04
+FROM ubuntu:14.04
+
+RUN apt-get update
+
+RUN apt-get install -y openssh-server
+RUN mkdir /var/run/sshd
+RUN echo 'root:root' |chpasswd
+RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
+
+RUN apt-get install -y supervisor
+ADD sshd_nginx_pdnsd.conf /etc/supervisor/conf.d/sshd_nginx_pdnsd.conf
 
 ADD pdnsd /usr/bin/pdnsd
-ADD pdnsd.conf /root/pdnsd.conf
 RUN chmod +x /usr/bin/pdnsd
+ADD pdnsd.conf /root/pdnsd.conf
 
 ADD nginx /usr/bin/nginx
-ADD nginx.conf /root/nginx.conf
 RUN chmod +x /usr/bin/nginx
+ADD nginx.conf /root/nginx.conf
 
-CMD ["/usr/bin/pdnsd", "-c /root/pdnsd.conf > /dev/null 2>&1 &"]
-CMD ["/usr/bin/nginx", "-c /root/nginx.conf > /dev/null 2>&1 &"]
+CMD service supervisor start
