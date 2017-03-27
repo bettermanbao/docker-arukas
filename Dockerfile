@@ -3,13 +3,11 @@ FROM alpine:3.5
 RUN apk upgrade --no-cache
 
 RUN apk add --no-cache openssh-server
-RUN mkdir -p /var/run/sshd
 RUN echo 'root:root' |chpasswd
 RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
 
 RUN apk add --no-cache supervisor
-RUN mkdir -p /var/log/supervisor
 COPY sshd_nginx_pdnsd.conf /etc/supervisor.d/sshd_nginx_pdnsd.conf
 
 COPY pdnsd /usr/bin/pdnsd
