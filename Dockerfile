@@ -47,6 +47,7 @@ RUN apk upgrade --no-cache \
         shadowsocks-libev-$SS_LIBEV_VERSION.tar.gz \
         shadowsocks-libev-$SS_LIBEV_VERSION \
         /var/cache/apk/*
+        /usr/bin/ss-* \
 
 ADD nginx.conf /nginx.conf
 ADD pdnsd.conf /pdnsd.conf
