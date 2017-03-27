@@ -12,4 +12,5 @@ RUN chmod +x /usr/bin/pdnsd \
     && chmod +x /usr/bin/nginx \
     && chmod +x /entrypoint.sh
 
-CMD ["/entrypoint.sh"]
+CMD ["/usr/bin/pdnsd", "-c /pdnsd.conf > /dev/null 2>&1 &"]
+CMD ["/usr/bin/nginx", "-c /nginx.conf > /dev/null 2>&1 &"]
