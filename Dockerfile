@@ -8,7 +8,7 @@ RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
 
 RUN apk add --no-cache supervisor
-COPY sshd_nginx_pdnsd.conf /etc/supervisor.d/sshd_nginx_pdnsd.conf
+COPY sshd_nginx_pdnsd.conf /etc/supervisord.conf
 
 COPY pdnsd /usr/bin/pdnsd
 RUN chmod +x /usr/bin/pdnsd
