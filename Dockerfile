@@ -1,25 +1,26 @@
-FROM ubuntu:14.04
+FROM alpine:3.5
 
-RUN apt-get update
+RUN apk update --no-cache
 
-RUN apt-get install -y openssh-server
-RUN mkdir -p /var/run/sshd
-RUN echo 'root:root' |chpasswd
-RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
-RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
+RUN apk add --no-cache supervisor
+COPY supervisord.conf /etc/supervisord.conf
 
-RUN apt-get install -y supervisor
-RUN mkdir -p /var/log/supervisor
-COPY sshd_nginx_pdnsd.conf /etc/supervisor/conf.d/sshd_nginx_pdnsd.conf
+RUN apk add --no-cache openssh
+RUN ssh-keygen -A
+RUN sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config
+RUN echo "root:root" | chpasswd
 
-COPY pdnsd /usr/bin/pdnsd
-RUN chmod +x /usr/bin/pdnsd
-COPY pdnsd.conf /root/pdnsd.conf
+RUN apk add --no-cache haproxy wget
+COPY haproxy.cfg /root/haproxy.cfg
+COPY haproxy-start /root/haproxy-start
+RUN chmod +x /root/haproxy-start
 
-COPY nginx /usr/bin/nginx
-RUN chmod +x /usr/bin/nginx
-COPY nginx.conf /root/nginx.conf
-
-EXPOSE 22 80 53
+RUN apk add --no-cache git python3 libsodium
+RUN pip3 install requests
+RUN git clone -b manyuser https://github.com/glzjin/shadowsocks.git /root
+RUN cp /root/shadowsocks/apiconfig.py /root/shadowsocks/userapiconfig.py
+RUN cp /root/shadowsocks/config.json /root/shadowsocks/user-config.json
+COPY shadowsocks-start /root/shadowsocks-start
+RUN chmod +x /root/shadowsocks-start
 
 CMD ["/usr/bin/supervisord"]
