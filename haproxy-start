@@ -7,7 +7,6 @@ sed -i '/bind/c\    bind 0.0.0.0:'"$CONTAINER_ PORT" $CONFIG_HAPROXY
 API_TOKEN=${API_TOKEN}
 API_SECRET=${API_TOKEN}
 CONTAINERS_ID=${CONTAINERS_ID}
-CONTAINERS_PORT=${CONTAINERS_PORT}
 OUTPUT_CONTAINERS='/var/log/containers'
 wget -q -O $OUTPUT_CONTAINERS --auth-no-challenge https://$API_TOKEN:$API_SECRET@app.arukas.io/api/containers
 CONTAINERS_PORT_EXT=$(cat $OUTPUT_CONTAINERS | grep -Eo $CONTAINERS_ID'.+' | grep -Eo '"container_port":'$CONTAINERS_PORT'.+' | awk -F '[,:"]' '{print "    \"server_port\":"$8",";}')
