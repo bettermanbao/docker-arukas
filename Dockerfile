@@ -17,7 +17,7 @@ RUN chmod +x /root/haproxy-start
 
 RUN apk add --no-cache git python3 libsodium
 RUN pip3 install requests
-RUN git clone -b manyuser https://github.com/glzjin/shadowsocks.git /root
+RUN git clone -b manyuser https://github.com/glzjin/shadowsocks.git /root/shadowsocks
 RUN cp /root/shadowsocks/apiconfig.py /root/shadowsocks/userapiconfig.py
 RUN cp /root/shadowsocks/config.json /root/shadowsocks/user-config.json
 COPY shadowsocks-start /root/shadowsocks-start
